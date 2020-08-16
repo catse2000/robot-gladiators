@@ -25,8 +25,16 @@ var fightOrSkip = function(){
 }
 // this creates a function named "fight"
 var fight = function(enemy) {
+    // keep track of who goes first
+    var isPlayerTurn = true;
+
+    if (Math.random() > 0.5) {
+        isPlayerTurn = false;
+    }
+
     // repeat and execute as long as the enemy robot is alive
     while(enemy.health > 0 && playerInfo.health > 0) {
+        if (isPlayerTurn){
             // ask user if they'd like to fight or skip using fightOrSkip function
             if (fightOrSkip()){
                 //if true, leave fight by breaking loop
@@ -35,7 +43,8 @@ var fight = function(enemy) {
 
             //Subtract the value of 'playerInfo.attack' fromt he value of 'enemy.health' and use that result to update the value in the 'enemy.health' variable
             var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
-            window.alert("Damage: " + damage);
+            
+            //remove enemy's health by subtracting the amount we set in the damage variable
             enemy.health = Math.max(0, enemy.health - damage);
 
             //Log a resulting message tot he console os we know that it worked.
@@ -54,11 +63,13 @@ var fight = function(enemy) {
             else {
                    window.alert(enemy.name + " still has " + enemy.health + " health left.");
             }
-    
+            //player gets attacked first
+        }
+        else{
             //Subtract the value of 'enemy.attack' from the value of 'playerInfo.health' and use that result to update the value in the 'playerInfo.health' variable.
             var damage = randomNumber(enemy.attack - 3, enemy.attack);
-            window.alert("Damage: " + damage);
 
+            //remove enemy's health by subtracting the amount we set in the damage variable
             playerInfo.health = Math.max(0, playerInfo.health - damage);
 
             //Log a resulting message to the console so we know that it worked. 
@@ -76,8 +87,11 @@ var fight = function(enemy) {
             }
 
         }
+        //switch turn order for next round
+        isPlayerTurn = !isPlayerTurn;        
+    }
    
-    };
+};
     
 //function to generate a random numeric value
 var randomNumber = function(min, max) {
